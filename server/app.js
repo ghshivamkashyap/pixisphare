@@ -12,12 +12,24 @@ const locationRoutes = require("./routes/location");
 const reviewRoutes = require("./routes/review");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
+const rateLimit = require("express-rate-limit");
+const morgan = require("morgan");
 
 dotenv.config({ path: path.join(__dirname, ".env") });
 
 const app = express();
 app.use(bodyParser.json());
 app.use(express.json());
+app.use(morgan("dev"));
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use(limiter);
+
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => console.log("MongoDB connected"))
