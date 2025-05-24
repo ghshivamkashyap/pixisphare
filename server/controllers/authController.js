@@ -113,3 +113,24 @@ exports.verifyPartner = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
+
+// Get dashboard statistics
+exports.getDashboardStats = async (req, res) => {
+  try {
+    const [clients, partners, inquiries, pendingVerifications] =
+      await Promise.all([
+        User.countDocuments({ role: "client" }),
+        User.countDocuments({ role: "partner" }),
+        require("../models/Inquiry").countDocuments(),
+        User.countDocuments({ role: "partner", verificationStatus: "pending" }),
+      ]);
+    res.json({
+      clients,
+      partners,
+      inquiries,
+      pendingVerifications,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
