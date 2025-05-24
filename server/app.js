@@ -7,6 +7,9 @@ const authRoutes = require("./routes/auth");
 const partnerRoutes = require("./routes/partner");
 const adminRoutes = require("./routes/admin");
 const inquiryRoutes = require('./routes/inquiry');
+const categoryRoutes = require('./routes/category');
+const locationRoutes = require('./routes/location');
+const reviewRoutes = require('./routes/review');
 
 dotenv.config({ path: path.join(__dirname, ".env") });
 
@@ -27,6 +30,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/partner", partnerRoutes);
 app.use("/api/admin", adminRoutes);
 app.use('/api/inquiry', inquiryRoutes);
+app.use('/api/admin', categoryRoutes);
+app.use('/api/admin', locationRoutes);
+app.use('/api/admin', reviewRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

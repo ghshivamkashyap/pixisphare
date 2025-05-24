@@ -55,6 +55,10 @@ const userSchema = new mongoose.Schema(
       required: false,
       trim: true,
     },
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
