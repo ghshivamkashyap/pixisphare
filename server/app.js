@@ -6,10 +6,12 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./routes/auth");
 const partnerRoutes = require("./routes/partner");
 const adminRoutes = require("./routes/admin");
-const inquiryRoutes = require('./routes/inquiry');
-const categoryRoutes = require('./routes/category');
-const locationRoutes = require('./routes/location');
-const reviewRoutes = require('./routes/review');
+const inquiryRoutes = require("./routes/inquiry");
+const categoryRoutes = require("./routes/category");
+const locationRoutes = require("./routes/location");
+const reviewRoutes = require("./routes/review");
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
 
 dotenv.config({ path: path.join(__dirname, ".env") });
 
@@ -29,10 +31,26 @@ app.get("/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/partner", partnerRoutes);
 app.use("/api/admin", adminRoutes);
-app.use('/api/inquiry', inquiryRoutes);
-app.use('/api/admin', categoryRoutes);
-app.use('/api/admin', locationRoutes);
-app.use('/api/admin', reviewRoutes);
+app.use("/api/inquiry", inquiryRoutes);
+app.use("/api/admin", categoryRoutes);
+app.use("/api/admin", locationRoutes);
+app.use("/api/admin", reviewRoutes);
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Pixisphere API",
+      version: "1.0.0",
+      description: "API documentation for Pixisphere platform",
+    },
+    servers: [{ url: "http://localhost:" + (process.env.PORT || 5000) }],
+  },
+  apis: ["./routes/*.js", "./models/*.js"],
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

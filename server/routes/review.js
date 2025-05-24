@@ -3,13 +3,85 @@ const router = express.Router();
 const reviewController = require('../controllers/reviewController');
 const { authenticate, requireRole } = require('../middlewares/auth');
 
-// GET /api/admin/reviews
+/**
+ * @swagger
+ * /api/admin/reviews:
+ *   get:
+ *     summary: Get all reviews
+ *     tags: [Review]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of reviews
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ */
 router.get('/reviews', authenticate, requireRole('admin'), reviewController.getReviews);
 
-// PUT /api/admin/reviews/:id
+/**
+ * @swagger
+ * /api/admin/reviews/{id}:
+ *   put:
+ *     summary: Edit a review by id
+ *     tags: [Review]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Review ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               rating:
+ *                 type: number
+ *               comment:
+ *                 type: string
+ *               date:
+ *                 type: string
+ *                 format: date
+ *     responses:
+ *       200:
+ *         description: Review updated
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ *       404:
+ *         description: Review not found
+ *   delete:
+ *     summary: Delete a review by id
+ *     tags: [Review]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Review ID
+ *     responses:
+ *       200:
+ *         description: Review deleted
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ *       404:
+ *         description: Review not found
+ */
 router.put('/reviews/:id', authenticate, requireRole('admin'), reviewController.editReview);
-
-// DELETE /api/admin/reviews/:id
 router.delete('/reviews/:id', authenticate, requireRole('admin'), reviewController.deleteReview);
 
 module.exports = router;
