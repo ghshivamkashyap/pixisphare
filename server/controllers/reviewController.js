@@ -45,3 +45,24 @@ exports.deleteReview = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
+
+// Create a review (client)
+exports.createReview = async (req, res) => {
+  try {
+    const clientId = req.user.userId;
+    const { partnerId, rating, comment } = req.body;
+    if (!partnerId || !rating) {
+      return res.status(400).json({ message: 'partnerId and rating are required' });
+    }
+    // Prevent duplicate review by same client for same partner (optional)
+    const existing = await Review.findOne({ partnerId, clientId });
+    if (existing) {
+      return res.status(400).json({ message: 'You have already reviewed this partner' });
+    }
+    const review = new Review({ partnerId, clientId, rating, comment });
+    await review.save();
+    res.status(201).json({ review });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};

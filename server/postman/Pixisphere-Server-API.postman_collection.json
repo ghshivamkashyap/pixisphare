@@ -97,6 +97,34 @@
               "path": ["api", "partner", "portfolio"]
             }
           }
+        },
+        {
+          "name": "Get All Partners (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/partners",
+              "host": ["{{base_url}}"],
+              "path": ["api", "partners"]
+            }
+          }
+        },
+        {
+          "name": "Get Partner By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{client_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/partners/{{partner_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "partners", "{{partner_id}}"]
+            }
+          }
         }
       ]
     },
@@ -119,6 +147,91 @@
               "raw": "{{base_url}}/api/inquiry/inquiry",
               "host": ["{{base_url}}"],
               "path": ["api", "inquiry", "inquiry"]
+            }
+          }
+        },
+        {
+          "name": "Get Assigned Inquiries (Partner)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{partner_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/inquiry/partner/leads",
+              "host": ["{{base_url}}"],
+              "path": ["api", "inquiry", "partner", "leads"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Review",
+      "item": [
+        {
+          "name": "Create Review (Client)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{client_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"partnerId\": \"{{partner_id}}\",\n  \"rating\": 5,\n  \"comment\": \"Great service and photos!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/review",
+              "host": ["{{base_url}}"],
+              "path": ["api", "review"]
+            }
+          }
+        },
+        {
+          "name": "Get All Reviews (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/reviews",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "reviews"]
+            }
+          }
+        },
+        {
+          "name": "Edit Review (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 4,\n  \"comment\": \"Updated comment\",\n  \"date\": \"2025-06-01\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/reviews/{{review_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "reviews", "{{review_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Review (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/reviews/{{review_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "reviews", "{{review_id}}"]
             }
           }
         }
@@ -197,20 +310,6 @@
               "path": ["api", "admin", "locations"]
             }
           }
-        },
-        {
-          "name": "Get Reviews",
-          "request": {
-            "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/admin/reviews",
-              "host": ["{{base_url}}"],
-              "path": ["api", "admin", "reviews"]
-            }
-          }
         }
       ]
     }
@@ -220,6 +319,7 @@
     { "key": "partner_token", "value": "" },
     { "key": "client_token", "value": "" },
     { "key": "admin_token", "value": "" },
-    { "key": "partner_id", "value": "" }
+    { "key": "partner_id", "value": "" },
+    { "key": "review_id", "value": "" }
   ]
 }

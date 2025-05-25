@@ -44,9 +44,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/partner", partnerRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/inquiry", inquiryRoutes);
-app.use("/api/admin", categoryRoutes);
-app.use("/api/admin", locationRoutes);
-app.use("/api/admin", reviewRoutes);
+app.use("/api/admin/categories", categoryRoutes);
+app.use("/api/admin/locations", locationRoutes);
+app.use("/api/review", reviewRoutes);
 
 const swaggerOptions = {
   definition: {

@@ -84,4 +84,43 @@ router.get('/reviews', authenticate, requireRole('admin'), reviewController.getR
 router.put('/reviews/:id', authenticate, requireRole('admin'), reviewController.editReview);
 router.delete('/reviews/:id', authenticate, requireRole('admin'), reviewController.deleteReview);
 
+/**
+ * @swagger
+ * /api/review:
+ *   post:
+ *     summary: Create a review for a partner
+ *     tags: [Review]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               partnerId:
+ *                 type: string
+ *                 description: Partner user ID
+ *               rating:
+ *                 type: number
+ *                 minimum: 1
+ *                 maximum: 5
+ *               comment:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Review created
+ *       400:
+ *         description: Bad request or duplicate review
+ *       401:
+ *         description: Unauthorized
+ */
+router.post(
+  '/create',
+  authenticate,
+  requireRole('client'),
+  reviewController.createReview
+);
+
 module.exports = router;
