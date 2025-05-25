@@ -1,0 +1,225 @@
+{
+  "info": {
+    "_postman_id": "b1e1e1e1-1234-5678-9101-abcdefabcdef",
+    "name": "Pixisphere Server API",
+    "description": "Postman collection for Pixisphere backend API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Signup",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"client\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/signup",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "signup"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Partner",
+      "item": [
+        {
+          "name": "Onboard Partner",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{partner_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serviceDetails\": \"Wedding Photography\",\n  \"documentInfo\": {\n    \"aadharNumber\": \"123456789012\"\n  },\n  \"portfolioSamples\": [\"https://example.com/sample1.jpg\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/partner/onboard",
+              "host": ["{{base_url}}"],
+              "path": ["api", "partner", "onboard"]
+            }
+          }
+        },
+        {
+          "name": "Add Portfolio Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{partner_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imageUrl\": \"https://example.com/portfolio.jpg\",\n  \"description\": \"Sample portfolio image\",\n  \"index\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/partner/portfolio",
+              "host": ["{{base_url}}"],
+              "path": ["api", "partner", "portfolio"]
+            }
+          }
+        },
+        {
+          "name": "Get Portfolio",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{partner_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/partner/portfolio",
+              "host": ["{{base_url}}"],
+              "path": ["api", "partner", "portfolio"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Client Inquiry",
+      "item": [
+        {
+          "name": "Create Inquiry",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{client_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category\": \"wedding\",\n  \"date\": \"2025-06-01\",\n  \"budget\": 50000,\n  \"city\": \"Delhi\",\n  \"referenceImageUrl\": \"https://example.com/ref.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/inquiry/inquiry",
+              "host": ["{{base_url}}"],
+              "path": ["api", "inquiry", "inquiry"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Get Pending Partners",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/verifications",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "verifications"]
+            }
+          }
+        },
+        {
+          "name": "Verify Partner",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"verified\",\n  \"comment\": \"All docs verified\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/verify/{{partner_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "verify", "{{partner_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Add Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Wedding\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/categories",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "categories"]
+            }
+          }
+        },
+        {
+          "name": "Add Location",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Delhi\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/locations",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "locations"]
+            }
+          }
+        },
+        {
+          "name": "Get Reviews",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/reviews",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "reviews"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:5000" },
+    { "key": "partner_token", "value": "" },
+    { "key": "client_token", "value": "" },
+    { "key": "admin_token", "value": "" },
+    { "key": "partner_id", "value": "" }
+  ]
+}

@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const inquiryController = require('../controllers/inquiryController');
 const { authenticate, requireRole } = require('../middlewares/auth');
+const Category = require('../models/Category');
+const Location = require('../models/Location');
 
 /**
  * @swagger
@@ -56,5 +58,24 @@ router.post('/inquiry', authenticate, requireRole('client'), inquiryController.c
  *         description: Forbidden
  */
 router.get('/partner/leads', authenticate, requireRole('partner'), inquiryController.getAssignedInquiries);
+
+// GET /api/inquiry/categories
+router.get('/categories', async (req, res) => {
+  try {
+    const categories = await Category.find().sort({ name: 1 });
+    res.json({ categories });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
+router.get('/locations', async (req, res) => {
+  try {
+    const locations = await Location.find().sort({ name: 1 });
+    res.json({ locations });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
 
 module.exports = router;

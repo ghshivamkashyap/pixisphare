@@ -134,3 +134,106 @@ exports.getDashboardStats = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
+
+// Get all verified partners with filtering, sorting, and pagination
+exports.getAllPartners = async (req, res) => {
+  try {
+    const {
+      category,
+      city,
+      minPrice,
+      maxPrice,
+      rating,
+      sortBy = "price",
+      sortOrder = "asc",
+      page = 1,
+      limit = 10,
+    } = req.query;
+
+    const filter = {
+      role: "partner",
+      verificationStatus: "verified",
+    };
+    if (category) {
+      filter.serviceDetails = { $regex: category, $options: "i" };
+    }
+    if (city) {
+      filter.city = city;
+    }
+    if (minPrice || maxPrice) {
+      filter["serviceDetails.price"] = {};
+      if (minPrice) filter["serviceDetails.price"].$gte = Number(minPrice);
+      if (maxPrice) filter["serviceDetails.price"].$lte = Number(maxPrice);
+    }
+
+    // Aggregate for rating filter and sorting
+    const aggregate = [
+      { $match: filter },
+      // Join reviews for rating
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "_id",
+          foreignField: "partnerId",
+          as: "reviews",
+        },
+      },
+      {
+        $addFields: {
+          avgRating: { $avg: "$reviews.rating" },
+        },
+      },
+    ];
+    if (rating) {
+      aggregate.push({ $match: { avgRating: { $gte: Number(rating) } } });
+    }
+    // Sorting
+    let sortField = sortBy === "rating" ? "avgRating" : "serviceDetails.price";
+    let sort = {};
+    sort[sortField] = sortOrder === "desc" ? -1 : 1;
+    aggregate.push({ $sort: sort });
+    // Pagination
+    aggregate.push(
+      { $skip: (Number(page) - 1) * Number(limit) },
+      { $limit: Number(limit) }
+    );
+    // Exclude password
+    aggregate.push({ $project: { password: 0, reviews: 0 } });
+
+    const partners = await User.aggregate(aggregate);
+    res.json({ partners });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+// Get a partner by ID, including portfolio and reviews
+exports.getPartnerById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const partner = await User.findOne({ _id: id, role: 'partner' })
+      .select('-password')
+      .lean();
+    if (!partner) {
+      return res.status(404).json({ message: 'Partner not found' });
+    }
+    // Populate portfolio
+    const Portfolio = require('../models/Portfolio');
+    const portfolio = await Portfolio.find({ partnerId: id }).sort({ index: 1 });
+    // Populate reviews
+    const Review = require('../models/Review');
+    const reviews = await Review.find({ partnerId: id }).sort({ date: -1 });
+    // Prepare response
+    res.json({
+      name: partner.name,
+      bio: partner.serviceDetails || '',
+      price: partner.serviceDetails?.price || null,
+      tags: partner.serviceDetails?.tags || [],
+      styles: partner.serviceDetails?.styles || [],
+      gallery: portfolio,
+      reviews: reviews
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};

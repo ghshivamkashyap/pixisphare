@@ -166,4 +166,58 @@ router.delete(
   portfolioController.deletePortfolioItem
 );
 
+/**
+ * @swagger
+ * /api/partners:
+ *   get:
+ *     summary: Get all partners
+ *     tags: [Partner]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of partners
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ */
+router.get(
+  "/partners",
+  authenticate,
+  requireRole("admin"),
+  authController.getAllPartners
+);
+
+/**
+ * @swagger
+ * /api/partners/{id}:
+ *   get:
+ *     summary: Get a partner by ID (with portfolio and reviews)
+ *     tags: [Partner]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Partner user ID
+ *     responses:
+ *       200:
+ *         description: Partner details with portfolio and reviews
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ *       404:
+ *         description: Partner not found
+ */
+router.get(
+  "/partners/:id",
+  authenticate,
+  authController.getPartnerById
+);
+
 module.exports = router;
