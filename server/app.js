@@ -14,10 +14,12 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
 const rateLimit = require("express-rate-limit");
 const morgan = require("morgan");
+const cors = require("cors");
 
 dotenv.config({ path: path.join(__dirname, ".env") });
 
 const app = express();
+app.use(cors({ origin: "*" }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(morgan("dev"));
