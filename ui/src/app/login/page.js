@@ -18,7 +18,7 @@ export default function LoginPage() {
     setError("");
     try {
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL_LOCAL}/auth/login`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
         { email, password }
       );
       if (res.data && res.data.token) {

@@ -23,7 +23,7 @@ export default function SignupPage() {
       const payload = { name, email, password, role };
       if (role === "partner") payload.price = price;
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL_LOCAL}/auth/signup`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signup`,
         payload
       );
       if (res.data && (res.data.token || res.data.message)) {
