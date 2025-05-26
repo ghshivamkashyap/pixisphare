@@ -75,7 +75,7 @@ export default function HomePage() {
           className="space-y-4"
         >
           <div>
-            <label className="block mb-1 font-medium">Category</label>
+            <label className="block mb-1 font-medium">Services</label>
             <input
               type="text"
               className="w-full border px-3 py-2 rounded"
@@ -86,16 +86,18 @@ export default function HomePage() {
               placeholder="e.g. Wedding"
             />
           </div>
-          <div>
+          {/* <div>
             <label className="block mb-1 font-medium">City</label>
             <input
               type="text"
               className="w-full border px-3 py-2 rounded"
               value={filters.city}
-              onChange={(e) => setFilters((f) => ({ ...f, city: e.target.value }))}
+              onChange={(e) =>
+                setFilters((f) => ({ ...f, city: e.target.value }))
+              }
               placeholder="e.g. Mumbai"
             />
-          </div>
+          </div> */}
           <div className="flex gap-2">
             <div className="flex-1">
               <label className="block mb-1 font-medium">Min Price</label>
@@ -103,7 +105,9 @@ export default function HomePage() {
                 type="number"
                 className="w-full border px-3 py-2 rounded"
                 value={filters.minPrice}
-                onChange={(e) => setFilters((f) => ({ ...f, minPrice: e.target.value }))}
+                onChange={(e) =>
+                  setFilters((f) => ({ ...f, minPrice: e.target.value }))
+                }
                 min={0}
                 placeholder="0"
               />
@@ -114,7 +118,9 @@ export default function HomePage() {
                 type="number"
                 className="w-full border px-3 py-2 rounded"
                 value={filters.maxPrice}
-                onChange={(e) => setFilters((f) => ({ ...f, maxPrice: e.target.value }))}
+                onChange={(e) =>
+                  setFilters((f) => ({ ...f, maxPrice: e.target.value }))
+                }
                 min={0}
                 placeholder="10000"
               />
@@ -126,7 +132,9 @@ export default function HomePage() {
               type="number"
               className="w-full border px-3 py-2 rounded"
               value={filters.rating}
-              onChange={(e) => setFilters((f) => ({ ...f, rating: e.target.value }))}
+              onChange={(e) =>
+                setFilters((f) => ({ ...f, rating: e.target.value }))
+              }
               min={0}
               max={5}
               step={0.1}
@@ -148,12 +156,16 @@ export default function HomePage() {
             type="text"
             placeholder="Search by name or style"
             value={filters.search}
-            onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
+            onChange={(e) =>
+              setFilters((f) => ({ ...f, search: e.target.value }))
+            }
             className="w-full md:w-1/2 p-2 border rounded"
           />
           <select
             value={filters.sortBy}
-            onChange={(e) => setFilters((f) => ({ ...f, sortBy: e.target.value }))}
+            onChange={(e) =>
+              setFilters((f) => ({ ...f, sortBy: e.target.value }))
+            }
             className="ml-0 md:ml-2 p-2 border rounded"
           >
             <option value="">Sort By</option>

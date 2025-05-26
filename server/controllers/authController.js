@@ -72,7 +72,7 @@ exports.partnerOnboarding = async (req, res) => {
         serviceDetails,
         documentInfo,
         portfolioSamples,
-        verificationStatus: "pending",
+        // verificationStatus: "pending",
       },
       { new: true }
     ).select("-password");
@@ -242,6 +242,7 @@ exports.getPartnerById = async (req, res) => {
       name: partner.name,
       bio: partner.serviceDetails || "",
       price: partner.price || null,
+      prportfolioSamplesice: partner.portfolioSamples || null,
       tags: partner.serviceDetails?.tags || [],
       styles: partner.serviceDetails?.styles || [],
       gallery: portfolio,

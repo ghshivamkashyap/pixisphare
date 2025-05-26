@@ -37,6 +37,16 @@ function AdminNavLink() {
   );
 }
 
+function PartnerNavLink() {
+  const { isAuthenticated, user } = useAuth();
+  if (!isAuthenticated || user?.role !== "partner") return null;
+  return (
+    <Link href="/partners" className="hover:text-blue-600 font-medium">
+      Partner Onboarding
+    </Link>
+  );
+}
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -62,6 +72,7 @@ export default function RootLayout({ children }) {
               <Link href="/signup" className="hover:text-blue-600 font-medium">
                 Signup
               </Link>
+              <PartnerNavLink />
               <AdminNavLink />
               <AuthNav />
             </div>

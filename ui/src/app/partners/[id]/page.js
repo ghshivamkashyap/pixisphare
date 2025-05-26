@@ -5,16 +5,28 @@ import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 import api from "../../../../lib/api";
 import InquiryModal from "../../components/InquiryModal";
+import { useAuth } from "../../../../context/AuthContext";
 
 export default function PartnerProfilePage() {
   const router = useRouter();
   const { id } = useParams();
+  const { user, isAuthenticated } = useAuth();
   const [partner, setPartner] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showInquiry, setShowInquiry] = useState(false);
+  const [reviewComment, setReviewComment] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewLoading, setReviewLoading] = useState(false);
+  const [reviewError, setReviewError] = useState("");
+  const [reviewSuccess, setReviewSuccess] = useState("");
 
   useEffect(() => {
+    if (!isAuthenticated) return;
+    if (user?.role !== "client" && user?.role !== "admin") {
+      router.replace("/");
+      return;
+    }
     if (!id) return;
     setLoading(true);
     // console.log(`Fetching partner with ID: ${id}`);
@@ -28,7 +40,34 @@ export default function PartnerProfilePage() {
       })
       .catch((err) => setError("Failed to load partner profile."))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, isAuthenticated, user, router]);
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    setReviewLoading(true);
+    setReviewError("");
+    setReviewSuccess("");
+    try {
+      await api.post(
+        "/reviews/create",
+        {
+          partnerId: id,
+          rating: reviewRating,
+          comment: reviewComment,
+        },
+        { headers: { Authorization: `Bearer ${user?.token}` } }
+      );
+      setReviewSuccess("Review submitted!");
+      setReviewComment("");
+      setReviewRating(5);
+      // Refetch partner to update reviews
+      api.get(`/partner/partners/${id}`).then((res) => setPartner(res.data));
+    } catch (err) {
+      setReviewError(err.response?.data?.message || "Failed to submit review.");
+    } finally {
+      setReviewLoading(false);
+    }
+  };
 
   if (loading) return <div className="text-center py-8">Loading...</div>;
   if (error)
@@ -127,6 +166,53 @@ export default function PartnerProfilePage() {
           </div>
         ) : (
           <div className="text-gray-400">No reviews yet.</div>
+        )}
+        {/* Review submission form (clients only) */}
+        {user?.role === "client" && (
+          <form
+            onSubmit={handleReviewSubmit}
+            className="mt-6 space-y-2 bg-gray-50 p-4 rounded"
+          >
+            <div>
+              <label className="block mb-1 font-medium">Your Rating</label>
+              <select
+                className="border px-2 py-1 rounded"
+                value={reviewRating}
+                onChange={(e) => setReviewRating(Number(e.target.value))}
+                required
+              >
+                {[5, 4, 3, 2, 1].map((r) => (
+                  <option key={r} value={r}>
+                    {r} Star{r > 1 ? "s" : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block mb-1 font-medium">Your Review</label>
+              <textarea
+                className="w-full border px-2 py-1 rounded"
+                value={reviewComment}
+                onChange={(e) => setReviewComment(e.target.value)}
+                required
+                rows={2}
+                placeholder="Write your feedback..."
+              />
+            </div>
+            {reviewError && (
+              <div className="text-red-600 text-sm">{reviewError}</div>
+            )}
+            {reviewSuccess && (
+              <div className="text-green-600 text-sm">{reviewSuccess}</div>
+            )}
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+              disabled={reviewLoading}
+            >
+              {reviewLoading ? "Submitting..." : "Submit Review"}
+            </button>
+          </form>
         )}
       </div>
       <InquiryModal
