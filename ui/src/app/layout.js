@@ -27,6 +27,16 @@ function AuthNav() {
   );
 }
 
+function AdminNavLink() {
+  const { isAuthenticated, user } = useAuth();
+  if (!isAuthenticated || user?.role !== "admin") return null;
+  return (
+    <Link href="/admin" className="hover:text-blue-600 font-medium">
+      Admin
+    </Link>
+  );
+}
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -51,7 +61,8 @@ export default function RootLayout({ children }) {
               </Link>
               <Link href="/signup" className="hover:text-blue-600 font-medium">
                 Signup
-              </Link>{" "}
+              </Link>
+              <AdminNavLink />
               <AuthNav />
             </div>
           </nav>

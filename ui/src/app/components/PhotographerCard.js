@@ -19,16 +19,14 @@ export default function PhotographerCard({ photographer }) {
         {photographer.name}
       </h2>
       <div className="text-blue-600 font-bold text-md">
-        ₹{photographer.price}
+        ₹{photographer.price !== undefined ? photographer.price : "N/A"}
       </div>
       <div className="flex items-center gap-1">
         {[1, 2, 3, 4, 5].map((star) => (
           <span
             key={star}
             className={
-              star <= Math.round(rating)
-                ? "text-yellow-400"
-                : "text-gray-300"
+              star <= Math.round(rating) ? "text-yellow-400" : "text-gray-300"
             }
           >
             ★

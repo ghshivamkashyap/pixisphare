@@ -33,6 +33,11 @@ const userSchema = new mongoose.Schema(
       required: false,
       trim: true,
     },
+    price: {
+      type: Number,
+      required: function() { return this.role === "partner"; },
+      min: 0,
+    },
     documentInfo: {
       aadharNumber: {
         type: String,

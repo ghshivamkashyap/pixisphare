@@ -9,6 +9,7 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("client");
+  const [price, setPrice] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -19,9 +20,11 @@ export default function SignupPage() {
     setLoading(true);
     setError("");
     try {
+      const payload = { name, email, password, role };
+      if (role === "partner") payload.price = price;
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL_LOCAL}/auth/signup`,
-        { name, email, password, role }
+        payload
       );
       if (res.data && (res.data.token || res.data.message)) {
         if (res.data.token) {
@@ -91,6 +94,20 @@ export default function SignupPage() {
             <option value="partner">Partner</option>
           </select>
         </div>
+        {role === "partner" && (
+          <div>
+            <label className="block mb-1 font-medium">Price (₹)</label>
+            <input
+              type="number"
+              className="w-full border px-3 py-2 rounded"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              min={0}
+              required
+              placeholder="Enter your base price"
+            />
+          </div>
+        )}
         {error && <div className="text-red-600 text-sm">{error}</div>}
         <button
           type="submit"

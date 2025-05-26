@@ -54,6 +54,9 @@ export default function PartnerProfilePage() {
         <div className="flex-1">
           <h1 className="text-2xl font-bold mb-2">{partner.name}</h1>
           <div className="text-gray-600 mb-1">{partner.location}</div>
+          <div className="text-blue-600 font-bold text-lg mb-1">
+            ₹{partner.price !== undefined ? partner.price : "N/A"}
+          </div>
           <div className="mb-2 text-blue-700 font-medium">
             {partner.serviceDetails}
           </div>

@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 // Signup controller
 exports.signup = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, price } = req.body;
     console.log("Signup request body:", req.body);
 
     // Check if user already exists
@@ -17,7 +17,13 @@ exports.signup = async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
     // Create user
-    const user = new User({ name, email, password: hashedPassword, role });
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword,
+      role,
+      price: price ? price : null,
+    });
     await user.save();
     res.status(201).json({ message: "User created successfully" });
   } catch (err) {
@@ -235,7 +241,7 @@ exports.getPartnerById = async (req, res) => {
     res.json({
       name: partner.name,
       bio: partner.serviceDetails || "",
-      price: partner.serviceDetails?.price || null,
+      price: partner.price || null,
       tags: partner.serviceDetails?.tags || [],
       styles: partner.serviceDetails?.styles || [],
       gallery: portfolio,
