@@ -6,8 +6,11 @@ import PhotographerCard from "./components/PhotographerCard";
 import api from "../../lib/api";
 import { useAuth } from "../../context/AuthContext";
 import { useRouter } from "next/navigation";
+import useProtectedPage from "../../hooks/useProtectedPage";
+// import useProtectedPage from "../hooks/useProtectedPage";
 
 export default function HomePage() {
+  // useProtectedPage("client");
   const { isAuthenticated } = useAuth();
   const router = useRouter();
 

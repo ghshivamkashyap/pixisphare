@@ -6,8 +6,10 @@ import Image from "next/image";
 import api from "../../../../lib/api";
 import InquiryModal from "../../components/InquiryModal";
 import { useAuth } from "../../../../context/AuthContext";
+import useProtectedPage from "../../../../hooks/useProtectedPage";
 
 export default function PartnerProfilePage() {
+  useProtectedPage("client");
   const router = useRouter();
   const { id } = useParams();
   const { user, isAuthenticated } = useAuth();

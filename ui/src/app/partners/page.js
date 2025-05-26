@@ -2,8 +2,11 @@
 import { useState } from "react";
 import api from "../../../lib/api";
 import { useAuth } from "../../../context/AuthContext";
+import useProtectedPage from "../../../hooks/useProtectedPage";
+// import useProtectedPage from "../../hooks/useProtectedPage";
 
 export default function PartnerOnboardingForm() {
+  useProtectedPage("partner");
   const { token } = useAuth();
   const [serviceDetails, setServiceDetails] = useState("");
   const [aadharNumber, setAadharNumber] = useState("");

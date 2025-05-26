@@ -1,8 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import api from "../../../../lib/api";
+import useProtectedPage from "../../../../hooks/useProtectedPage";
+// import useProtectedPage from "../../../hooks/useProtectedPage";
 
 export default function LocationsManager() {
+  useProtectedPage("admin");
+
   const [locations, setLocations] = useState([]);
   const [newLocation, setNewLocation] = useState("");
   const [loading, setLoading] = useState(true);

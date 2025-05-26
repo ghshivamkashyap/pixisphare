@@ -47,6 +47,47 @@ function PartnerNavLink() {
   );
 }
 
+function RoleNavLinks() {
+  const { isAuthenticated, user, logout } = useAuth();
+  if (!isAuthenticated) return null;
+  return (
+    <>
+      {user?.role === "partner" && (
+        <Link
+          href="/partners/dashboard"
+          className="hover:text-blue-600 font-medium"
+        >
+          Dashboard
+        </Link>
+      )}
+      {user?.role === "partner" && (
+        <Link href="/partners/" className="hover:text-blue-600 font-medium">
+          Onboarding
+        </Link>
+      )}
+      {user?.role === "admin" && (
+        <Link href="/admin" className="hover:text-blue-600 font-medium">
+          Admin Panel
+        </Link>
+      )}{" "}
+      {user?.role === "admin" && (
+        <Link
+          href="/admin/settings"
+          className="hover:text-blue-600 font-medium"
+        >
+          Admin Settings
+        </Link>
+      )}
+      <button
+        onClick={logout}
+        className="ml-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs"
+      >
+        Logout
+      </button>
+    </>
+  );
+}
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -72,9 +113,7 @@ export default function RootLayout({ children }) {
               <Link href="/signup" className="hover:text-blue-600 font-medium">
                 Signup
               </Link>
-              <PartnerNavLink />
-              <AdminNavLink />
-              <AuthNav />
+              <RoleNavLinks />
             </div>
           </nav>
           <main className="max-w-5xl mx-auto px-4 py-8">
