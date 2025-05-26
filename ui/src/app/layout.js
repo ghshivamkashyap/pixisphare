@@ -54,7 +54,7 @@ function RoleNavLinks() {
     <>
       {user?.role === "partner" && (
         <Link
-          href="/partners/dashboard"
+          href="/leads"
           className="hover:text-blue-600 font-medium"
         >
           Dashboard
