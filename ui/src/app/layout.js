@@ -1,7 +1,31 @@
+"use client";
 import "./globals.css";
 import Link from "next/link";
-import { AuthProvider } from "../../context/AuthContext";
+import { AuthProvider, useAuth } from "../../context/AuthContext";
 import { Suspense } from "react";
+
+function AuthNav() {
+  const { isAuthenticated, logout, user } = useAuth();
+  // console.log("uuser", user);
+
+  if (!isAuthenticated) return null;
+  return (
+    <div className="flex items-center gap-2">
+      <Link href="/leads" className="hover:text-blue-600 font-medium">
+        Leads
+      </Link>{" "}
+      <span className="text-sm text-green-700">
+        Logged in as <b>{user?.email || user?.name || user?.role}</b>
+      </span>
+      <button
+        onClick={logout}
+        className="ml-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs"
+      >
+        Logout
+      </button>
+    </div>
+  );
+}
 
 export default function RootLayout({ children }) {
   return (
@@ -18,7 +42,7 @@ export default function RootLayout({ children }) {
                 Pixisphere
               </span>
             </div>
-            <div className="flex gap-6">
+            <div className="flex gap-6 items-center">
               <Link href="/" className="hover:text-blue-600 font-medium">
                 Home
               </Link>
@@ -27,7 +51,8 @@ export default function RootLayout({ children }) {
               </Link>
               <Link href="/signup" className="hover:text-blue-600 font-medium">
                 Signup
-              </Link>
+              </Link>{" "}
+              <AuthNav />
             </div>
           </nav>
           <main className="max-w-5xl mx-auto px-4 py-8">

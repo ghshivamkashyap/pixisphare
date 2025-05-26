@@ -8,7 +8,7 @@ exports.signup = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
     console.log("Signup request body:", req.body);
-    
+
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -22,7 +22,7 @@ exports.signup = async (req, res) => {
     res.status(201).json({ message: "User created successfully" });
   } catch (err) {
     console.log("Signup error:", err);
-    
+
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
@@ -206,6 +206,7 @@ exports.getAllPartners = async (req, res) => {
     aggregate.push({ $project: { password: 0, reviews: 0 } });
 
     const partners = await User.aggregate(aggregate);
+
     res.json({ partners });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
@@ -216,29 +217,31 @@ exports.getAllPartners = async (req, res) => {
 exports.getPartnerById = async (req, res) => {
   try {
     const { id } = req.params;
-    const partner = await User.findOne({ _id: id, role: 'partner' })
-      .select('-password')
+    const partner = await User.findOne({ _id: id, role: "partner" })
+      .select("-password")
       .lean();
     if (!partner) {
-      return res.status(404).json({ message: 'Partner not found' });
+      return res.status(404).json({ message: "Partner not found" });
     }
     // Populate portfolio
-    const Portfolio = require('../models/Portfolio');
-    const portfolio = await Portfolio.find({ partnerId: id }).sort({ index: 1 });
+    const Portfolio = require("../models/Portfolio");
+    const portfolio = await Portfolio.find({ partnerId: id }).sort({
+      index: 1,
+    });
     // Populate reviews
-    const Review = require('../models/Review');
+    const Review = require("../models/Review");
     const reviews = await Review.find({ partnerId: id }).sort({ date: -1 });
     // Prepare response
     res.json({
       name: partner.name,
-      bio: partner.serviceDetails || '',
+      bio: partner.serviceDetails || "",
       price: partner.serviceDetails?.price || null,
       tags: partner.serviceDetails?.tags || [],
       styles: partner.serviceDetails?.styles || [],
       gallery: portfolio,
-      reviews: reviews
+      reviews: reviews,
     });
   } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };

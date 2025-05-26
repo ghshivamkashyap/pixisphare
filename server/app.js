@@ -48,7 +48,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/inquiry", inquiryRoutes);
 app.use("/api/admin/categories", categoryRoutes);
 app.use("/api/admin/locations", locationRoutes);
-app.use("/api/review", reviewRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 const swaggerOptions = {
   definition: {
