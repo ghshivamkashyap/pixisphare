@@ -195,5 +195,37 @@ The Pixisphere UI is a Next.js 13+ app (App Router) styled with Tailwind CSS. It
 
 ---
 
+## Test Accounts for API/UI Demo
+
+You can use the following test accounts to log in and test the platform (via UI or API):
+
+**Admin**
+```json
+{
+    "email": "admin1@example.com",
+    "password": "AdminPass123"
+}
+```
+
+**Partner**
+```json
+{
+    "email": "partner1@example.com",
+    "password": "PartnerPass123"
+}
+```
+
+**Client**
+```json
+{
+    "email": "client3@example.com",
+    "password": "client123"
+}
+```
+
+Use these credentials on the deployed UI or in the Postman collection for authentication and role-based feature testing.
+
+---
+
 ## License
 [MIT](LICENSE)
